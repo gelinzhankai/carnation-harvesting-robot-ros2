@@ -42,9 +42,41 @@ cd /root/carnation_harvest
 
 如果克隆到其他目录，需要在运行 launch 时显式传入 `model_path:=...`，或同步修改配置文件中的默认路径。
 
-## 获取 YOLO 权重
+## 获取外部资源
 
-YOLOv8m2 权重文件体积较大，未直接提交到 Git 仓库。请从本仓库的 GitHub Releases 下载：
+仓库不直接提交大体积二进制资源。复现前需要从 GitHub Releases 下载 STL 外观模型包和 YOLO 权重。
+
+### 1. 下载 STL 外观模型
+
+请从 Releases 下载：
+
+```text
+carnation_description_meshes.zip
+```
+
+在仓库根目录解压：
+
+```bash
+cd /root/carnation_harvest
+unzip /path/to/carnation_description_meshes.zip -d /root/carnation_harvest
+```
+
+解压后应存在：
+
+```text
+/root/carnation_harvest/src/carnation_description/meshes/base_base_link.stl
+/root/carnation_harvest/src/carnation_description/meshes/base_link.stl
+/root/carnation_harvest/src/carnation_description/meshes/lower_arm_link.stl
+/root/carnation_harvest/src/carnation_description/meshes/lower_lift_link.stl
+/root/carnation_harvest/src/carnation_description/meshes/upper_arm_link.stl
+/root/carnation_harvest/src/carnation_description/meshes/upper_lift_link.stl
+```
+
+缺少 STL 文件时，RViz 中机器人外观会显示不完整。
+
+### 2. 下载 YOLO 权重
+
+请从 Releases 下载：
 
 ```text
 carnation_yolov8m2_best.pt

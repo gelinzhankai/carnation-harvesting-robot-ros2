@@ -29,11 +29,17 @@ models/*.engine
 models/*.tflite
 models/*.weights
 
+# Large robot mesh assets are distributed through GitHub Releases
+src/carnation_description/meshes/*.stl
+
 # Keep model documentation/placeholders
 !models/README.md
 !models/.gitkeep
+!src/carnation_description/meshes/README.md
+!src/carnation_description/meshes/.gitkeep
 
 # Generated demo outputs and temporary captures
+release_assets/
 demo_outputs/
 tmp/
 temp/
