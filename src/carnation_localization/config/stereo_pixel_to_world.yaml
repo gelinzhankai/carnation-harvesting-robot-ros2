@@ -1,0 +1,29 @@
+stereo_pixel_to_world_node:
+  ros__parameters:
+    left_input_topic: "/carnation/left/pixel_center"
+    right_input_topic: "/carnation/right/pixel_center"
+    target_pose_topic: "/target_pose"
+    camera_point_topic: "/carnation/stereo_target_point_camera"
+    world_point_topic: "/carnation/stereo_target_point_world"
+    marker_topic: "/carnation/stereo_target_marker_world"
+    target_frame: "world"
+    camera_frame: "left_camera_optical_frame"
+    fx: 1000.0
+    fy: 1000.0   #相机的焦距，单位为像素
+    cx: 640.0
+    cy: 360.0    #相机的主点坐标，单位为像素
+    baseline_m: 0.06
+    max_sync_delta_sec: 0.15
+    min_disparity_px: 1.0
+    world_translation_xyz: [0.0, 0.11, 1.20]
+    #平移矩阵t  式4-12
+    world_rotation_matrix: [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0]
+    #旋转矩阵R  式4-13
+    target_offset_xyz: [0.0, 0.0, 0.0]
+    #矫正原点
+    clamp_to_workspace: false
+    workspace_min_xyz: [-3.5, 0.39, 0.82]
+    workspace_max_xyz: [3.5, 0.73, 1.05]
+    #目标点的可工作范围
+    marker_scale: 0.05
+    log_target_coordinates: true

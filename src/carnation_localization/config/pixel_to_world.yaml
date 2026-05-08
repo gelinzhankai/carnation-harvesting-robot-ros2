@@ -1,0 +1,33 @@
+pixel_to_world_node:
+  ros__parameters:
+    input_topic: "/carnation/pixel_center"
+    target_pose_topic: "/target_pose"
+    camera_point_topic: "/carnation/target_point_camera"
+    world_point_topic: "/carnation/target_point_world"
+    marker_topic: "/carnation/target_marker_world"
+    target_rejected_topic: "/carnation/target_rejected"
+    target_frame: "world"
+    camera_frame: "camera_optical_frame"
+    fx: 1000.0
+    fy: 1000.0
+    cx: 640.0
+    cy: 360.0
+    depth_mode: "fixed_plus_bbox_height"
+    fixed_depth_m: 0.45
+    target_real_height_m: 0.067
+    reference_bbox_height_px: 230.00
+    bbox_height_depth_weight: 0.0015
+    clamp_near_depth_to_min: true
+    camera_depth_min_m: 0.32
+    camera_depth_max_m: 0.58
+    reject_too_near_targets: false
+    reject_out_of_depth_range: true
+    use_tf_extrinsics: true
+    camera_translation_xyz: [0.0, 0.0, 0.0]
+    camera_rotation_rpy: [0.0, 0.0, 0.0]
+    target_offset_xyz: [0.0, 0.0, -0.11]
+    clamp_to_workspace: true
+    workspace_min_xyz: [-3.5, 0.39, 0.82]
+    workspace_max_xyz: [3.5, 0.73, 1.05]
+    marker_scale: 0.05
+    log_target_coordinates: true

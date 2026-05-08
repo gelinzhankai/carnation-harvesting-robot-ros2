@@ -1,0 +1,27 @@
+image_source_node:
+  ros__parameters:
+    source_type: "image"
+    source_path: ""
+    trigger_file_path: ""
+    trigger_wait_timeout_sec: 2.0
+    use_stale_image_on_trigger_timeout: false
+    trigger_publish_burst_count: 5
+    trigger_idle_refresh_sec: 3.0
+    camera_index: 0
+    output_topic: "/camera/image_raw"
+    frame_id: "camera_optical_frame"
+    publish_rate_hz: 2.0
+    screen_region_width: 1000
+    screen_region_height: 1000
+    screen_region_right_margin: 0
+    screen_region_bottom_margin: 0
+    loop_video: true
+    loop_images: false
+    advance_images_on_cycle_complete: true
+    advance_images_on_frame_exhausted: true
+    gate_on_cycle_complete: true
+    cycle_busy_topic: "/harvest_cycle_busy"
+    image_done_topic: "/carnation/image_targets_done"
+    target_rejected_topic: "/carnation/target_rejected"
+    frame_exhausted_topic: "/carnation/frame_exhausted"
+    publish_on_startup: true

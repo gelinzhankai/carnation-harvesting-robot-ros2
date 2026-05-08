@@ -1,0 +1,58 @@
+# ROS 2 / colcon build outputs
+build/
+install/
+log/
+.colcon/
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# ROS runtime data
+*.bag
+*.db3
+*.mcap
+*.log
+
+# Model weights and exported networks
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.engine
+models/*.tflite
+models/*.weights
+
+# Keep model documentation/placeholders
+!models/README.md
+!models/.gitkeep
+
+# Generated demo outputs and temporary captures
+demo_outputs/
+tmp/
+temp/
+*.tmp
+ros_screen_region_frame.jpg
+ros_screen_region_trigger.txt
+ros_screen_region_config.json
+
+# Large media outputs
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# OS / editor metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local notes that may contain machine-specific paths
+*.local.md

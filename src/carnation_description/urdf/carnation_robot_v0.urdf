@@ -1,0 +1,335 @@
+<?xml version="1.0"?>
+
+<robot name="carnation_robot">
+  <!-- 1. 定义一个虚拟世界坐标系 -->
+  <link name="world"/>
+  <!-- 定义 world link：作为整个机器人的世界参考系 -->
+  <!-- 给整机移动提供一个父节点 -->
+  <link name="world_aligned_link"/>
+  <!-- 新增一个中间 link，用来整机姿态修正 -->
+
+  <joint name="world_align_joint" type="fixed">
+  <parent link="world"/>
+  <child link="world_aligned_link"/>
+  <origin xyz="0 0 0.20" rpy="1.5708 0 0"/>
+</joint>
+
+  <!-- 2. 定义整机机架 base_link -->
+  <link name="base_link">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <!-- 这个 visual相对于 base_link 坐标系的位置和姿态 -->
+      <!-- rpy：绕 X/Y/Z 的角，单位弧度 -->
+      <geometry>
+        <!--几何体定义 -->
+        <mesh filename="package://carnation_description/meshes/base_link.stl"
+              scale="0.001 0.001 0.001"/>
+        <!-- 加载 STL 网格文件 -->
+        <!-- filename：使用 package:// 包路径来引用 meshes 目录中的文件 -->
+        <!-- scale：比例，乘 0.001 -->
+      </geometry>
+      <material name="base_gray">
+        <!-- material：定义显示颜色 -->
+        <color rgba="0.6 0.6 0.6 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <!-- 定义碰撞模型 -->
+      <!-- 和 visual 共用同一个 STL -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <!-- 碰撞模型相对 link 的位姿 -->
+
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/base_link.stl"
+              scale="0.001 0.001 0.001"/>
+        <!-- 碰撞几何使用 base_link.stl -->
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- 定义底盘 base_base_link，固定安装在整机机架 base_link 上 -->
+  <link name="base_base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/base_base_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+
+      <material name="base_base_teal">
+        <color rgba="0.0 0.45 0.55 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0.161 0.081" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.42 0.11 0.37"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_to_base_base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_base_link"/>
+    <origin xyz="0 0 0" rpy="3.14159 0 0"/>
+  </joint>
+
+
+  <!-- 3. world -> base_link：整机沿过道方向平移 -->
+
+  <joint name="base_move_joint" type="prismatic">
+    <!-- joint：定义关节 -->
+    <!-- name：关节名称 -->
+    <!-- type="prismatic"：移动关节，直线平移 -->
+
+    <parent link="world_aligned_link"/>
+    <!-- 父 link，世界矫正坐标系 -->
+
+    <child link="base_link"/>
+    <!-- 子 link，整机机架 -->
+
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+
+    <!-- 表示整机初始位置就在矫正后的机器原点 -->
+
+    <axis xyz="1 0 0"/>
+    <!-- axis：关节运动轴方向 -->
+    <!-- 定义整机沿 X 方向移动 -->
+
+    <limit lower="-3.5" upper="3.5" effort="500.0" velocity="0.5"/>
+    <!-- limit：关节限制 -->
+    <!-- lower/upper：平移范围，单位 m，设 -3.5~3.5m -->
+    <!-- effort：允许的最大推力 -->
+    <!-- velocity：最大移动速度 -->
+  </joint>
+
+  <!-- 4. 相机坐标系，固定安装在机架 base_link 上 -->
+  <link name="camera_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.06 0.04 0.04"/>
+      </geometry>
+      <material name="camera_black">
+        <color rgba="0.1 0.1 0.1 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="base_to_camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    
+    <origin xyz="0.00 1.00 -0.11" rpy="-1.5708 0 0"/>
+  </joint>
+
+  <link name="camera_optical_frame"/>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_frame"/>
+    <!-- optical frame 使用 ROS 相机约定：z 向前，x 向右，y 向下 -->
+    <origin xyz="0 0 0" rpy="-1.5708 0 0"/>
+  </joint>
+
+  <link name="upper_lift_link">
+    <!-- upper_lift_link：上机械臂的升降平台 -->
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/upper_lift_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+
+      <material name="upper_lift_blue">
+        <color rgba="0.2 0.4 0.9 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/upper_lift_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0"
+               iyy="0.1" iyz="0.0"
+               izz="0.1"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_lift_joint" type="prismatic">
+    <!-- 上机械臂升降关节 -->
+
+    <parent link="base_link"/>
+    <!-- 父节点是整机机架 -->
+
+    <child link="upper_lift_link"/>
+    <!-- 子节点是上机械臂升降平台 -->
+
+    <origin xyz="0 -0.12 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <!-- 上机械臂沿 Z 方向升降 -->
+
+    <limit lower="0.0" upper="0.20" effort="200.0" velocity="0.05"/>
+    <!-- 行程设 0~0.20m-->
+  </joint>
+  <link name="upper_arm_link">
+    <!-- upper_arm_link：上机械臂的伸缩部分 -->
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/upper_arm_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+
+      <material name="upper_arm_green">
+        <color rgba="0.2 0.8 0.3 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/upper_arm_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0"
+               iyy="0.05" iyz="0.0"
+               izz="0.05"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_extend_joint" type="prismatic">
+    <!-- 上机械臂伸缩关节 -->
+
+    <parent link="upper_lift_link"/>
+    <!-- 父节点是上升降平台 -->
+
+    <child link="upper_arm_link"/>
+    <!-- 子节点是上机械臂伸出体 -->
+
+    <origin xyz="0 0 0.12" rpy="0 0 0"/>
+
+    <axis xyz="0 0 1"/>
+
+    <limit lower="0.0" upper="-0.37" effort="150.0" velocity="0.05"/>
+    <!-- 伸缩行程设 0~0.37m -->
+  </joint>
+
+  <link name="lower_lift_link">
+    <!-- 下机械臂的升降平台 -->
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/lower_lift_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+
+      <material name="lower_lift_orange">
+        <color rgba="0.95 0.55 0.15 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/lower_lift_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0"
+               iyy="0.1" iyz="0.0"
+               izz="0.1"/>
+    </inertial>
+  </link>
+
+  <joint name="lower_lift_joint" type="prismatic">
+    <!-- 下机械臂升降关节 -->
+
+    <parent link="base_link"/>
+    <!-- 父节点是整机机架 -->
+
+    <child link="lower_lift_link"/>
+    <!-- 子节点是下机械臂升降平台 -->
+
+    <origin xyz="0 -0.05 0" rpy="0 0 0"/>
+
+    <axis xyz="0 1 0"/>
+    <!-- 下机械臂同样沿 Z 方向升降 -->
+
+    <limit lower="0.0" upper="0.20" effort="200.0" velocity="0.05"/>
+    <!-- 行程 0~0.20m -->
+  </joint>
+
+  <link name="lower_arm_link">
+    <!-- 下机械臂的伸缩部分 -->
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/lower_arm_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+
+      <material name="lower_arm_red">
+        <color rgba="0.85 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://carnation_description/meshes/lower_arm_link.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0"
+               iyy="0.05" iyz="0.0"
+               izz="0.05"/>
+    </inertial>
+  </link>
+
+  <joint name="lower_extend_joint" type="prismatic">
+    <!-- 下机械臂伸缩关节 -->
+
+    <parent link="lower_lift_link"/>
+    <!-- 父节点是下升降平台 -->
+
+    <child link="lower_arm_link"/>
+    <!-- 子节点是下机械臂伸出体 -->
+
+    <origin xyz="0 0 0.08" rpy="0 0 0"/>
+
+    <axis xyz="0 0 1"/>
+    <!-- 伸出方向定义为 X 方向 -->
+
+    <limit lower="0.0" upper="-0.37" effort="150.0" velocity="0.05"/>
+  </joint>
+
+</robot>

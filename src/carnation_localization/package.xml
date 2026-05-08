@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>carnation_localization</name>
+  <version>0.0.1</version>
+  <description>Localization nodes for converting pixel detections to target poses.</description>
+
+  <maintainer email="root@example.com">root</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>carnation_interfaces</depend>
+  <depend>carnation_description</depend>
+  <depend>carnation_planning</depend>
+
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>rqt_image_view</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

@@ -1,0 +1,27 @@
+yolo_detector_node:
+  ros__parameters:
+    model_path: "/root/carnation_harvest/models/carnation_yolov8m2_best.pt"
+    image_topic: "/camera/image_raw"
+    pixel_center_topic: "/carnation/pixel_center"
+    annotated_image_topic: "/carnation/detections/image_annotated"
+    image_done_topic: "/carnation/image_targets_done"
+    target_rejected_topic: "/carnation/target_rejected"
+    frame_exhausted_topic: "/carnation/frame_exhausted"
+    runtime_config_path: "/mnt/h/carnation_detection/ros_screen_region_config.json"
+    target_class_name: "carnation_flower"
+    confidence_threshold: 0.50
+    publish_annotated_image: true
+    annotated_republish_rate_hz: 1.0
+    image_size: 640
+    device: ""
+    sequence_detections: true
+    cycle_busy_topic: "/harvest_cycle_busy"
+    wait_for_cycle_ready: true
+    first_target_delay_sec: 1.0
+    target_feedback_timeout_sec: 3.0
+    allow_sequence_repeat: false
+    sequence_sort_axis: "u"
+    sequence_sort_reverse: false
+    simulate_recenter_after_target: false
+    virtual_principal_u: 640.0
+    reset_virtual_principal_on_new_image: true
