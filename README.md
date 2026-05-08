@@ -35,9 +35,10 @@ carnation_harvest/
 │   ├── screen_region_detect_yolov8m2.py
 │   ├── start_detect_yolov8m2_screen_region.bat
 │   ├── screen_region_frame_bridge.py
+│   ├── start_ros_screen_region_frame_bridge.bat
 │   ├── start_screen_region_frame_bridge.bat
 │   └── demo_stereo_from_single_image.py
-├── data/apply_images/             # 少量静态演示图片
+├── data/apply_images/             # 少量静态演示图片，后续可自行用视频流
 ├── models/                        # 模型权重不提交到 Git
 └── README.md
 ```
@@ -117,11 +118,23 @@ source install/setup.bash
 
 ## 最终演示：Windows 屏幕识别到 ROS2 采收仿真
 
-这是本项目最终集成版本的主要运行方式。
+这是本项目最终集成版本的主要运行方式。推荐启动顺序为：
+
+```text
+Windows 侧 YOLO 实时识别 -> Windows 侧截图桥接 -> WSL/ROS2 一体化 launch
+```
+
+其中，第 1 步负责显示实时检测结果并写入屏幕区域、置信度阈值等配置；第 2 步负责等待 ROS 触发信号并截取当前帧；第 3 步负责在 ROS2 中完成图像发布、目标定位、RViz 显示和采收动作仿真。
 
 ### 1. 启动 Windows 侧 YOLO 屏幕区域识别
 
-如果通过 `\\wsl.localhost` 访问本仓库，可运行：
+在 Windows 侧先运行：
+
+```bat
+H:\carnation_detection\start_detect_yolov8m2_screen_region.bat
+```
+
+如果通过 `\\wsl.localhost` 直接访问本仓库，也可以运行：
 
 ```bat
 \\wsl.localhost\Ubuntu-24.04\root\carnation_harvest\tools\start_detect_yolov8m2_screen_region.bat
@@ -148,10 +161,16 @@ H:\carnation_detection\ros_screen_region_config.json
 
 ### 2. 启动 Windows 到 ROS 的截图桥接脚本
 
-运行：
+确认第 1 步已经启动后，再运行：
 
 ```bat
-\\wsl.localhost\Ubuntu-24.04\root\carnation_harvest\tools\start_screen_region_frame_bridge.bat
+H:\carnation_detection\start_ros_screen_region_frame_bridge.bat
+```
+
+如果通过 `\\wsl.localhost` 直接访问本仓库，也可以运行：
+
+```bat
+\\wsl.localhost\Ubuntu-24.04\root\carnation_harvest\tools\start_ros_screen_region_frame_bridge.bat
 ```
 
 该脚本会等待 ROS 触发信号，并将最新截图写入：
