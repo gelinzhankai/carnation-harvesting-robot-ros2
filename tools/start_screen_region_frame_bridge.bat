@@ -2,7 +2,7 @@
 setlocal
 
 set "PYTHON_EXE=H:\carnation_detection\.venv\Scripts\python.exe"
-set "SCRIPT_PATH=\\wsl.localhost\Ubuntu-24.04\root\carnation_harvest\tools\screen_region_frame_bridge.py"
+set "SCRIPT_PATH=%~dp0screen_region_frame_bridge.py"
 
 if not exist "%PYTHON_EXE%" (
     echo Python not found: %PYTHON_EXE%
